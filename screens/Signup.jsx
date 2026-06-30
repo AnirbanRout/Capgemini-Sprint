@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import axios from "axios";
 
 const signupSchema = Yup.object({
-  username: Yup.string().required("Username is required"),
+  name: Yup.string().required("Name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
   password: Yup.string()
     .min(6, "Minimum 6 characters")
@@ -22,7 +22,7 @@ const ErrorText = ({ children }) => (
 const Signup = () => {
   const handleSignup = (values) => {
     const userData = {
-      username: values.username,
+      name: values.username,
       email: values.email,
       password: values.password,
       age: values.age,
@@ -58,12 +58,12 @@ const Signup = () => {
       {({ values, handleChange, handleBlur, handleSubmit }) => (
         <View style={{ padding: 20 }}>
           <TextInput
-            placeholder="Username"
-            value={values.username}
-            onChangeText={handleChange("username")}
-            onBlur={handleBlur("username")}
+            placeholder="Name"
+            value={values.name}
+            onChangeText={handleChange("name")}
+            onBlur={handleBlur("name")}
           />
-          <ErrorMessage name="username" component={ErrorText} />
+          <ErrorMessage name="name" component={ErrorText} />
 
           <TextInput
             placeholder="Email"

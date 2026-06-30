@@ -1,7 +1,7 @@
 {
     "users": [
   {
-    "id": 1,
+    "id": "1",
     "name": "John",
     "email": "john@gmail.com",
     "password": "12345",
@@ -11,7 +11,7 @@
     "profilePhoto": ""
   },
   {
-    "id": 2,
+    "id": "2",
     "name": "Jane",
     "email": "jane@gmail.com",
     "password": "12345",
@@ -21,7 +21,7 @@
     "profilePhoto": ""
   },
   {
-    "id": 3,
+    "id": "3",
     "name": "Mike",
     "email": "mike@gmail.com",
     "password": "12345",
@@ -31,7 +31,7 @@
     "profilePhoto": ""
   },
   {
-    "id": 4,
+    "id": "4",
     "name": "Emily",
     "email": "emily@gmail.com",
     "password": "12345",
@@ -45,28 +45,28 @@
 
 "workouts": [
   {
-    "id": 1,
+    "id": "1",
     "name": "Morning Cardio",
     "duration": 30,
     "calories": 250,
     "level": "Beginner"
   },
   {
-    "id": 2,
+    "id": "2",
     "name": "Strength Training",
     "duration": 45,
     "calories": 400,
     "level": "Intermediate"
   },
   {
-    "id": 3,
+    "id": "3",
     "name": "Yoga Flow",
     "duration": 60,
     "calories": 200,
     "level": "Beginner"
   },
   {
-    "id": 4,
+    "id": "4",
     "name": "HIIT Blast",
     "duration": 20,
     "calories": 300,
@@ -76,25 +76,25 @@
 
 "nutrition": [
   {
-    "id": 1,
+    "id": "1",
     "meal": "Oatmeal",
     "calories": 300,
     "protein": 12
   },
   {
-    "id": 2,
+    "id": "2",
     "meal": "Grilled Chicken Salad",
     "calories": 400,
     "protein": 30
   },
   {
-    "id": 3,
+    "id": "3",
     "meal": "Quinoa Bowl",
     "calories": 350,
     "protein": 15
   },
   {
-    "id": 4,
+    "id": "4",
     "meal": "Protein Smoothie",
     "calories": 250,
     "protein": 20
@@ -103,30 +103,30 @@
 
 "workoutHistory": [
   {
-    "id": 1,
+    "id": "1",
     "userId": 1,
-    "workoutId": 1,
+    "workoutId": "1",
     "date": "2026-06-30",
     "durationCompleted": 30
   },
   {
-    "id": 2,
+    "id": "2",
     "userId": 1,
-    "workoutId": 2,
+    "workoutId": "2",
     "date": "2026-06-29",
     "durationCompleted": 45
   },
   {
-    "id": 3,
+    "id": "3",
     "userId": 2,
-    "workoutId": 3,
+    "workoutId": "3",
     "date": "2026-06-28",
     "durationCompleted": 60
   },
   {
-    "id": 4,
+    "id": "4",
     "userId": 3,
-    "workoutId": 4,
+    "workoutId": "4",
     "date": "2026-06-27",
     "durationCompleted": 20
   }
@@ -134,26 +134,26 @@
 
 "preferences": [
   {
-    "id": 1,
-    "userId": 1,
+    "id": "1",
+    "userId": "1",
     "theme": "light",
     "goal": "Weight Loss"
   },
   {
-    "id": 2,
-    "userId": 2,
+    "id": "2",
+    "userId": "2",
     "theme": "dark",
     "goal": "Muscle Gain"
   },
   {
-    "id": 3,
-    "userId": 3,
+    "id": "3",
+    "userId": "3",
     "theme": "light",
     "goal": "Endurance"
   },
   {
-    "id": 4,
-    "userId": 4,
+    "id": "4",
+    "userId": "4",
     "theme": "dark",
     "goal": "Flexibility"
   }

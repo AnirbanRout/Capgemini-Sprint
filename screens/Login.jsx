@@ -1,25 +1,39 @@
 import React from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
-import { Formik } from "formik";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Alert,
+  KeyboardAvoidingView,
+} from "react-native";
+import { Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
-import { setToken, setUser } from "../redux/AuthSlice";
+import { login } from "../redux/slice/AuthSlice";
+
+import { Platform } from "react-native";
+
+import Api from "../api/Api";
 
 const LoginSchema = Yup.object({
   email: Yup.string().email("Invalid Email").required("Email is required"),
   password: Yup.string().required("Password is required"),
 });
 
+const ErrorText = ({ children }) => (
+  <Text style={{ color: "red", marginBottom: 10 }}>{children}</Text>
+);
+
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const handleLogin = async (values, { resetForm }) => {
     try {
-      const res = await axios.get(
-        `http://localhost:3000/users?email=${values.email}`,
-      );
+      const res = await Api.get(`/users?email=${values.email}`);
       if (res.data.length === 0) {
         Alert.alert("Error", "User not found");
         return;
@@ -33,8 +47,8 @@ const LoginScreen = ({ navigation }) => {
 
       const token = `token_${Date.now()}`;
 
-      dispatch(setToken(token));
-      dispatch(setUser(user));
+      dispatch(login({ user, token }));
+
       await AsyncStorage.setItem(
         "auth",
         JSON.stringify({
@@ -79,9 +93,7 @@ const LoginScreen = ({ navigation }) => {
             onChangeText={handleChange("email")}
             onBlur={handleBlur("email")}
           />
-          {touched.email && errors.email && (
-            <Text style={styles.error}>{errors.email}</Text>
-          )}
+          <ErrorMessage name="email" component={ErrorText} />
 
           <TextInput
             placeholder="Password"
@@ -91,9 +103,7 @@ const LoginScreen = ({ navigation }) => {
             onChangeText={handleChange("password")}
             onBlur={handleBlur("password")}
           />
-          {touched.password && errors.password && (
-            <Text style={styles.error}>{errors.password}</Text>
-          )}
+          <ErrorMessage name="password" component={ErrorText} />
 
           <Button title="Login" onPress={handleSubmit} />
         </View>
