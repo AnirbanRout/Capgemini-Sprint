@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 
 import React from "react";
-import Store from "./redux/store/Store";
+import Store from "./redux/Store";
 
 import { Provider } from "react-redux";
 

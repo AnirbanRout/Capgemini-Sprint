@@ -1,96 +1,234 @@
 {
   "users": [
-  {
-    "id": 1,
-    "name": "John",
-    "email": "john@gmail.com",
-    "password": "12345",
-    "age": 25,
-    "weight": 70,
-    "height": 175,
-    "profilePhoto": ""
-  },
-  {
-    "id": 2,
-    "name": "Jane",
-    "email": "jane@gmail.com",
-    "password": "12345",
-    "age": 28,
-    "weight": 65,
-    "height": 165,
-    "profilePhoto": ""
-  },
-  {
-    "id": 3,
-    "name": "Mike",
-    "email": "mike@gmail.com",
-    "password": "12345",
-    "age": 30,
-    "weight": 80,
-    "height": 180,
-    "profilePhoto": ""
-  },
-  {
-    "id": 4,
-    "name": "Emily",
-    "email": "emily@gmail.com",
-    "password": "12345",
-    "age": 26,
-    "weight": 60,
-    "height": 160,
-    "profilePhoto": ""
-  }
-],
+    {
+      "id": 1,
+      "name": "John",
+      "email": "john@gmail.com",
+      "password": "12345",
+      "age": 25,
+      "weight": 70,
+      "height": 175,
+      "profilePhoto": "",
+      "role": "user",
+      "progressPhotos": []
+    },
+    {
+      "id": 2,
+      "name": "Jane",
+      "email": "jane@gmail.com",
+      "password": "12345",
+      "age": 28,
+      "weight": 65,
+      "height": 165,
+      "profilePhoto": "",
+      "role": "user",
+      "progressPhotos": []
+    },
+    {
+      "id": 3,
+      "name": "Mike",
+      "email": "mike@gmail.com",
+      "password": "12345",
+      "age": 30,
+      "weight": 80,
+      "height": 180,
+      "profilePhoto": "",
+      "role": "user",
+      "progressPhotos": []
+    },
+    {
+      "id": 4,
+      "name": "Emily",
+      "email": "emily@gmail.com",
+      "password": "12345",
+      "age": 26,
+      "weight": 60,
+      "height": 160,
+      "profilePhoto": "",
+      "role": "user",
+      "progressPhotos": []
+    }
+  ],
 
-"workouts": [
-  { "id": 1, "name": "Morning Cardio", "duration": 30, "calories": 250, "level": "Beginner" },
-  { "id": 2, "name": "Strength Training", "duration": 45, "calories": 400, "level": "Intermediate" },
-  { "id": 3, "name": "Yoga Flow", "duration": 60, "calories": 200, "level": "Beginner" },
-  { "id": 4, "name": "HIIT Blast", "duration": 20, "calories": 300, "level": "Advanced" }
-],
+  "workouts": [
+    {
+      "id": 1,
+      "name": "Morning Cardio Blast",
+      "duration": 30,
+      "calories": 250,
+      "level": "Beginner",
+      "targetGoal": "Weight Loss",
+      "videoUrl": "",
+      "description": "Low-impact cardio for fat burning"
+    },
+    {
+      "id": 2,
+      "name": "Hypertrophy Strength Training",
+      "duration": 45,
+      "calories": 400,
+      "level": "Intermediate",
+      "targetGoal": "Muscle Gain",
+      "videoUrl": "",
+      "description": "Strength focused workout routine"
+    },
+    {
+      "id": 3,
+      "name": "Vinyasa Yoga Flow",
+      "duration": 60,
+      "calories": 200,
+      "level": "Beginner",
+      "targetGoal": "Flexibility",
+      "videoUrl": "",
+      "description": "Mobility and flexibility training"
+    },
+    {
+      "id": 4,
+      "name": "HIIT Blast",
+      "duration": 20,
+      "calories": 300,
+      "level": "Advanced",
+      "targetGoal": "Endurance",
+      "videoUrl": "",
+      "description": "High intensity fat burn session"
+    }
+  ],
 
-"nutrition": [
-  { "id": 1,  "meal": "Oatmeal", "calories": 300, "protein": 12 },
-  { "id": 2, "meal": "Grilled Chicken Salad", "calories": 400, "protein": 30 },
-  { "id": 3, "meal": "Quinoa Bowl", "calories": 350, "protein": 15 },
-  { "id": 4, "meal": "Protein Smoothie", "calories": 250, "protein": 20 }
-],
+  "nutrition": [
+    {
+      "id": 1,
+      "type": "Breakfast",
+      "meal": "Oatmeal",
+      "calories": 300,
+      "protein": 12
+    },
+    {
+      "id": 2,
+      "type": "Lunch",
+      "meal": "Grilled Chicken Salad",
+      "calories": 400,
+      "protein": 30
+    },
+    {
+      "id": 3,
+      "type": "Dinner",
+      "meal": "Quinoa Bowl",
+      "calories": 350,
+      "protein": 15
+    },
+    {
+      "id": 4,
+      "type": "Snack",
+      "meal": "Protein Smoothie",
+      "calories": 250,
+      "protein": 20
+    }
+  ],
 
-"workoutHistory": [
-  {
-    "id": 1,
-    "userId": 1,
-    "workoutId": 1,
-    "date": "2026-06-30",
-    "durationCompleted": 30
-  },
-  {
-    "id": 2,
-    "userId": 1,
-    "workoutId": 2,
-    "date": "2026-06-29",
-    "durationCompleted": 45
-  },
-  {
-    "id": 3,
-    "userId": 2,
-    "workoutId": 3,
-    "date": "2026-06-28",
-    "durationCompleted": 60
-  },
-  {
-    "id": 4,
-    "userId": 3,
-    "workoutId": 4,
-    "date": "2026-06-27",
-    "durationCompleted": 20
-  }
-],
+  "workoutHistory": [
+    {
+      "id": 1,
+      "userId": 1,
+      "workoutId": 1,
+      "date": "2026-06-30",
+      "durationCompleted": 30
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "workoutId": 2,
+      "date": "2026-06-29",
+      "durationCompleted": 45
+    },
+    {
+      "id": 3,
+      "userId": 2,
+      "workoutId": 3,
+      "date": "2026-06-28",
+      "durationCompleted": 60
+    },
+    {
+      "id": 4,
+      "userId": 3,
+      "workoutId": 4,
+      "date": "2026-06-27",
+      "durationCompleted": 20
+    }
+  ],
 
-"preferences": [
-  { "id": 1, "userId": 1, "theme": "light", "goal": "Weight Loss" },
-  { "id": 2, "userId": 2, "theme": "dark", "goal": "Muscle Gain" },
-  { "id": 3, "userId": 3, "theme": "light", "goal": "Endurance" },
-  { "id": 4, "userId": 4, "theme": "dark", "goal": "Flexibility" }
-]
+  "preferences": [
+    {
+      "id": 1,
+      "userId": 1,
+      "theme": "light",
+      "goal": "Weight Loss"
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "theme": "dark",
+      "goal": "Muscle Gain"
+    },
+    {
+      "id": 3,
+      "userId": 3,
+      "theme": "light",
+      "goal": "Endurance"
+    },
+    {
+      "id": 4,
+      "userId": 4,
+      "theme": "dark",
+      "goal": "Flexibility"
+    }
+  ],
+
+  "outdoorRuns": [
+    {
+      "id": "r1",
+      "userId": 1,
+      "date": "2026-06-30",
+      "distanceKm": 5.2,
+      "durationMinutes": 28,
+      "routeCoordinates": [
+        { "latitude": 22.5726, "longitude": 88.3639 },
+        { "latitude": 22.5740, "longitude": 88.3650 }
+      ]
+    }
+  ],
+
+  "progress": [
+    {
+      "id": 1,
+      "userId": 1,
+      "date": "2026-06-30",
+      "weight": 70,
+      "bodyFatPercentage": 18,
+      "muscleMass": 30
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "date": "2026-06-30",
+      "weight": 65,
+      "bodyFatPercentage": 22,
+      "muscleMass": 28
+    }
+  ],
+
+  "reviews": [
+    {
+      "id": 1,
+      "userId": 1,
+      "workoutId": 1,
+      "rating": 5,
+      "comment": "Great workout!"
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "workoutId": 2,
+      "rating": 4,
+      "comment": "Really effective session"
+    }
+  ]
 }

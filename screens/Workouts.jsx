@@ -1,140 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import {
-//   View,
-//   Text,
-//   FlatList,
-//   TouchableOpacity,
-//   Alert,
-//   StyleSheet,
-// } from "react-native";
-// import { useSelector, useDispatch } from "react-redux";
-// import Api from "../api/Api";
-// import { addWorkoutHistory } from "../redux/slice/WorkoutSlice";
-
-// const WorkoutScreen = ({ navigation }) => {
-//   const userData = useSelector((state) => state.auth);
-//   const dispatch = useDispatch();
-
-//   const [workouts, setWorkouts] = useState([]);
-
-//   const getWorkouts = async () => {
-//     try {
-//       const res = await Api.get("/workouts");
-//       setWorkouts(res.data);
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-
-//   useEffect(() => {
-//     getWorkouts();
-//   }, []);
-
-//   const startWorkout = async (workout) => {
-//     try {
-//       const payload = {
-//         userId: userData.user.id,
-//         workoutId: workout.id,
-//         date: new Date().toISOString(),
-//         durationCompleted: workout.duration,
-//       };
-
-//       const res = await Api.post("/workoutHistory", payload);
-
-//       dispatch(addWorkoutHistory(res.data));
-
-//       Alert.alert("Success", "Workout added to history!");
-//     } catch (err) {
-//       console.log(err);
-//       Alert.alert("Error", "Something went wrong");
-//     }
-//   };
-
-//   const renderItem = ({ item }) => (
-//     <View style={styles.card}>
-//       <Text style={styles.title}>{item.name}</Text>
-
-//       <Text style={styles.text}>Duration: {item.duration} mins</Text>
-//       <Text style={styles.text}>Calories: {item.calories} kcal</Text>
-//       <Text style={styles.text}>Level: {item.level}</Text>
-
-//       <TouchableOpacity
-//         onPress={() => startWorkout(item)}
-//         style={styles.button}
-//       >
-//         <Text style={styles.buttonText}>Start Workout</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
-
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.header}>Available Workouts</Text>
-
-//       <FlatList
-//         data={workouts}
-//         keyExtractor={(item) => item.id.toString()}
-//         renderItem={renderItem}
-//       />
-
-//       <TouchableOpacity
-//         style={styles.button}
-//         onPress={() => navigation.navigate("DashBoard")}
-//       >
-//         <Text style={styles.buttonText}>Go to Dashboard</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 15,
-//     backgroundColor: "#f5f5f5",
-//   },
-
-//   header: {
-//     fontSize: 20,
-//     fontWeight: "bold",
-//     marginBottom: 10,
-//   },
-
-//   card: {
-//     backgroundColor: "#fff",
-//     padding: 15,
-//     marginBottom: 10,
-//     borderRadius: 10,
-//     elevation: 3,
-//   },
-
-//   title: {
-//     fontSize: 16,
-//     fontWeight: "bold",
-//     marginBottom: 5,
-//   },
-
-//   text: {
-//     fontSize: 14,
-//     color: "#374151",
-//   },
-
-//   button: {
-//     marginTop: 10,
-//     backgroundColor: "#111827",
-//     padding: 10,
-//     borderRadius: 8,
-//   },
-
-//   buttonText: {
-//     color: "#fff",
-//     textAlign: "center",
-//     fontWeight: "600",
-//   },
-// });
-
-// export default WorkoutScreen;
-
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -155,7 +18,11 @@ const WorkoutScreen = ({ navigation }) => {
 
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [btnLoading, setBtnLoading] = useState(false);
+
+  // 👇 per-button loading fix
+  const [loadingWorkoutId, setLoadingWorkoutId] = useState(null);
+
+  const userId = userData?.user?.id;
 
   const getWorkouts = async () => {
     try {
@@ -175,11 +42,16 @@ const WorkoutScreen = ({ navigation }) => {
   }, []);
 
   const startWorkout = async (workout) => {
+    if (!userId) {
+      Alert.alert("Error", "User not found");
+      return;
+    }
+
     try {
-      setBtnLoading(true);
+      setLoadingWorkoutId(workout.id);
 
       const payload = {
-        userId: userData?.user?.id,
+        userId: userId,
         workoutId: workout.id,
         date: new Date().toISOString(),
         durationCompleted: workout.duration,
@@ -194,7 +66,7 @@ const WorkoutScreen = ({ navigation }) => {
       console.log(err);
       Alert.alert("Error", "Something went wrong");
     } finally {
-      setBtnLoading(false);
+      setLoadingWorkoutId(null);
     }
   };
 
@@ -208,11 +80,14 @@ const WorkoutScreen = ({ navigation }) => {
 
       <TouchableOpacity
         onPress={() => startWorkout(item)}
-        style={styles.button}
-        disabled={btnLoading}
+        style={[
+          styles.button,
+          loadingWorkoutId === item.id && { opacity: 0.6 },
+        ]}
+        disabled={loadingWorkoutId === item.id}
       >
         <Text style={styles.buttonText}>
-          {btnLoading ? "Starting..." : "Start Workout"}
+          {loadingWorkoutId === item.id ? "Starting..." : "Start Workout"}
         </Text>
       </TouchableOpacity>
     </View>
@@ -229,7 +104,7 @@ const WorkoutScreen = ({ navigation }) => {
       ) : (
         <FlatList
           data={workouts}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => String(item.id)}
           renderItem={renderItem}
           contentContainerStyle={{ paddingBottom: 20 }}
         />
@@ -244,6 +119,8 @@ const WorkoutScreen = ({ navigation }) => {
     </View>
   );
 };
+
+export default WorkoutScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -307,5 +184,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-export default WorkoutScreen;

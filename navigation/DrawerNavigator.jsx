@@ -11,11 +11,7 @@ import Logout from "../screens/Logout";
 const DrawerNavigator = () => {
   return (
     <Drawer.Navigator>
-      <Drawer.Screen
-        name="Home"
-        component={TabNavigator}
-        options={{ headerShown: false }}
-      />
+      <Drawer.Screen name="Home" component={TabNavigator} />
       <Drawer.Screen name="Settings" component={Settings} />
       <Drawer.Screen name="About" component={About} />
       <Drawer.Screen name="Logout" component={Logout} />
