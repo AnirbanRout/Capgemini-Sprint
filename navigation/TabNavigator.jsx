@@ -5,13 +5,16 @@ import DashBoard from "../screens/DashBoard";
 import Workouts from "../screens/Workouts";
 import Profile from "../screens/Profile";
 
+import Nutrition from "../screens/Nutrition";
+
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   return (
-    <Tab.Navigator initialRouteName="Dashboard">
-      <Tab.Screen name="Dashboard" component={DashBoard} />
+    <Tab.Navigator initialRouteName="DashBoard">
+      <Tab.Screen name="DashBoard" component={DashBoard} />
       <Tab.Screen name="Workouts" component={Workouts} />
+      <Tab.Screen name="Nutrition" component={Nutrition} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );

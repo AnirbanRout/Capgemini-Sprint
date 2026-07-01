@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import AuthReducer from "../slice/AuthSlice";
-import WorkoutReducer from "../slice/WorkoutSlice";
-import ThemeReducer from "../slice/ThemeSlice";
+import AuthReducer from "./slice/AuthSlice";
+import WorkoutReducer from "./slice/WorkoutSlice";
+import ThemeReducer from "./slice/ThemeSlice";
 
 const Store = configureStore({
   reducer: {
