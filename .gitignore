@@ -4,6 +4,7 @@
 node_modules/
 
 claude/
+api/config.js
 
 # Expo
 .expo/

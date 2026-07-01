@@ -10,16 +10,23 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import Api from "../api/Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { logout } from "../redux/slice/AuthSlice";
 import { useFocusEffect } from "@react-navigation/native";
+
+import * as ImagePicker from "expo-image-picker";
+import { Alert } from "react-native";
+
+import { login, logout } from "../redux/slice/AuthSlice";
 
 const ProfileScreen = ({ navigation }) => {
   const user = useSelector((state) => state.auth.user);
   const eatenMeals = useSelector((state) => state.workout.eatenMeals);
 
+  const token = useSelector((state) => state.auth.token);
+
   const dispatch = useDispatch();
 
   const [history, setHistory] = useState([]);
+  const [profileImage, setProfileImage] = useState(user?.profilePhoto || "");
 
   const getHistory = async () => {
     try {
@@ -51,6 +58,107 @@ const ProfileScreen = ({ navigation }) => {
     await AsyncStorage.clear();
     dispatch(logout());
     navigation.replace("Login");
+  };
+
+  //gallery picker
+  const pickImage = async () => {
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permission.granted) {
+      Alert.alert("Permission Denied", "Gallery permission is required.");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const imageUri = result.assets[0].uri;
+
+      try {
+        await Api.patch(`/users/${user.id}`, {
+          profilePhoto: imageUri,
+        });
+
+        const updatedUser = {
+          ...user,
+          profilePhoto: imageUri,
+        };
+
+        setProfileImage(imageUri);
+
+        dispatch(
+          login({
+            user: updatedUser,
+            token,
+          }),
+        );
+
+        await AsyncStorage.setItem(
+          "auth",
+          JSON.stringify({
+            user: updatedUser,
+            token,
+          }),
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  //camera picker
+  const takePhoto = async () => {
+    const permission = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (!permission.granted) {
+      Alert.alert("Permission Denied", "Camera permission is required.");
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const imageUri = result.assets[0].uri;
+
+      try {
+        await Api.patch(`/users/${user.id}`, {
+          profilePhoto: imageUri,
+        });
+
+        const updatedUser = {
+          ...user,
+          profilePhoto: imageUri,
+        };
+
+        setProfileImage(imageUri);
+
+        dispatch(
+          login({
+            user: updatedUser,
+            token,
+          }),
+        );
+
+        await AsyncStorage.setItem(
+          "auth",
+          JSON.stringify({
+            user: updatedUser,
+            token,
+          }),
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
 
   // WORKOUT ITEM
@@ -97,10 +205,18 @@ const ProfileScreen = ({ navigation }) => {
       <View style={styles.profileCard}>
         <Image
           source={{
-            uri: user?.profilePhoto || "https://i.pravatar.cc/150",
+            uri: profileImage || "https://i.pravatar.cc/150",
           }}
           style={styles.image}
         />
+
+        <TouchableOpacity style={styles.imageBtn} onPress={pickImage}>
+          <Text style={styles.imageBtnText}>Choose from Gallery</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.imageBtn} onPress={takePhoto}>
+          <Text style={styles.imageBtnText}>Take Photo</Text>
+        </TouchableOpacity>
 
         <Text style={styles.name}>{user?.name}</Text>
         <Text style={styles.email}>{user?.email}</Text>
@@ -279,6 +395,22 @@ const styles = StyleSheet.create({
 
   logoutText: {
     color: "#fff",
+    fontWeight: "bold",
+  },
+
+  imageBtn: {
+    backgroundColor: "#2563eb",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 8,
+    width: "100%",
+    alignItems: "center",
+  },
+
+  imageBtnText: {
+    color: "#fff",
+    fontSize: 14,
     fontWeight: "bold",
   },
 });

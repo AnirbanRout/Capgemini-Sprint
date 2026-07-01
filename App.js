@@ -12,7 +12,7 @@ import HealthTrack from "./pages/HealthTrack";
 export default function App() {
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1 }} edges={[]}>
         <Provider store={Store}>
           <HealthTrack />
         </Provider>
@@ -20,12 +20,3 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
