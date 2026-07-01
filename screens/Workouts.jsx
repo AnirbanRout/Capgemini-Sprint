@@ -7,6 +7,7 @@ import {
   Alert,
   StyleSheet,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Api from "../api/Api";
@@ -18,9 +19,9 @@ const WorkoutScreen = ({ navigation }) => {
 
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // 👇 per-button loading fix
   const [loadingWorkoutId, setLoadingWorkoutId] = useState(null);
+
+  const [addedMap, setAddedMap] = useState({}); // 👈 button state
 
   const userId = userData?.user?.id;
 
@@ -51,8 +52,8 @@ const WorkoutScreen = ({ navigation }) => {
       setLoadingWorkoutId(workout.id);
 
       const payload = {
-        userId: userId,
-        workoutId: workout.id,
+        userId: Number(userId), // 🔥 FIX HERE
+        workoutId: Number(workout.id), // optional but good practice
         date: new Date().toISOString(),
         durationCompleted: workout.duration,
       };
@@ -61,7 +62,12 @@ const WorkoutScreen = ({ navigation }) => {
 
       dispatch(addWorkoutHistory(res.data));
 
-      Alert.alert("Success", "Workout added to history!");
+      setAddedMap((prev) => ({
+        ...prev,
+        [workout.id]: true,
+      }));
+
+      Alert.alert("Success", "Workout added!");
     } catch (err) {
       console.log(err);
       Alert.alert("Error", "Something went wrong");
@@ -70,28 +76,30 @@ const WorkoutScreen = ({ navigation }) => {
     }
   };
 
-  const renderItem = ({ item }) => (
-    <View style={styles.card}>
-      <Text style={styles.title}>{item.name}</Text>
+  const renderItem = ({ item }) => {
+    const isLoading = loadingWorkoutId === item.id;
+    const isAdded = addedMap[item.id];
 
-      <Text style={styles.text}>⏱ Duration: {item.duration} mins</Text>
-      <Text style={styles.text}>🔥 Calories: {item.calories} kcal</Text>
-      <Text style={styles.text}>📊 Level: {item.level}</Text>
+    return (
+      <View style={styles.card}>
+        <Text style={styles.title}>{item.name}</Text>
 
-      <TouchableOpacity
-        onPress={() => startWorkout(item)}
-        style={[
-          styles.button,
-          loadingWorkoutId === item.id && { opacity: 0.6 },
-        ]}
-        disabled={loadingWorkoutId === item.id}
-      >
-        <Text style={styles.buttonText}>
-          {loadingWorkoutId === item.id ? "Starting..." : "Start Workout"}
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
+        <Text style={styles.text}>⏱ Duration: {item.duration} mins</Text>
+        <Text style={styles.text}>🔥 Calories: {item.calories}</Text>
+        <Text style={styles.text}>📊 Level: {item.level}</Text>
+
+        <Pressable
+          onPress={() => startWorkout(item)}
+          disabled={isLoading || isAdded}
+          style={[styles.button, (isLoading || isAdded) && { opacity: 0.6 }]}
+        >
+          <Text style={styles.buttonText}>
+            {isLoading ? "Starting..." : isAdded ? "Added" : "Start Workout"}
+          </Text>
+        </Pressable>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -106,7 +114,6 @@ const WorkoutScreen = ({ navigation }) => {
           data={workouts}
           keyExtractor={(item) => String(item.id)}
           renderItem={renderItem}
-          contentContainerStyle={{ paddingBottom: 20 }}
         />
       )}
 
@@ -119,8 +126,6 @@ const WorkoutScreen = ({ navigation }) => {
     </View>
   );
 };
-
-export default WorkoutScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -162,6 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#111827",
     padding: 10,
     borderRadius: 8,
+    alignItems: "center",
   },
 
   dashboardBtn: {
@@ -184,3 +190,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
+export default WorkoutScreen;

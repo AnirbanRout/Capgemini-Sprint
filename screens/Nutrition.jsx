@@ -5,29 +5,72 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
 import Api from "../api/Api";
+import { addEatenMeal } from "../redux/slice/WorkoutSlice";
+import { useSelector, useDispatch } from "react-redux";
 
-const filters = ["All", "Breakfast", "Lunch", "Dinner", "Snacks"];
+const filters = ["All", "Breakfast", "Lunch", "Dinner", "Snack"];
 
-const NutritionScreen = ({ navigation }) => {
+const Nutrition = ({ navigation }) => {
   const [nutrition, setNutrition] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("All");
+  const [loadingId, setLoadingId] = useState(null);
 
-  const getNutrition = async () => {
-    try {
-      const res = await Api.get("/nutrition");
-      setNutrition(res.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.auth.user);
+  const eatenMeals = useSelector((state) => state.workout.eatenMeals);
 
   useEffect(() => {
+    const getNutrition = async () => {
+      try {
+        const res = await Api.get("/nutrition");
+        setNutrition(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
     getNutrition();
   }, []);
 
-  // Filter logic
+  // ✅ FIXED: consistent id check
+  const isAdded = (item) => eatenMeals.some((m) => m.id === item.id);
+
+  const markAsEaten = (item) => {
+    if (!user?.id) {
+      Alert.alert("Error", "User not found");
+      return;
+    }
+
+    if (isAdded(item)) return;
+
+    setLoadingId(item.id);
+
+    try {
+      const payload = {
+        id: item.id, // ✅ IMPORTANT: consistent with Redux slice
+        userId: Number(user.id),
+        mealName: item.meal,
+        type: item.type,
+        calories: item.calories,
+        protein: item.protein,
+        date: new Date().toISOString(),
+      };
+
+      dispatch(addEatenMeal(payload));
+
+      Alert.alert("Success", `${item.meal} marked as eaten`);
+    } catch (err) {
+      console.log(err);
+      Alert.alert("Error", "Something went wrong");
+    } finally {
+      setLoadingId(null);
+    }
+  };
+
   const filteredData =
     selectedFilter === "All"
       ? nutrition
@@ -41,7 +84,7 @@ const NutritionScreen = ({ navigation }) => {
         return "🥗";
       case "Dinner":
         return "🍛";
-      case "Snacks":
+      case "Snack":
         return "🍪";
       default:
         return "🍽";
@@ -58,15 +101,27 @@ const NutritionScreen = ({ navigation }) => {
       <Text style={styles.text}>🔥 Calories: {item.calories}</Text>
       <Text style={styles.text}>💪 Protein: {item.protein}g</Text>
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Mark as Eaten</Text>
+      <TouchableOpacity
+        style={[
+          styles.button,
+          (loadingId === item.id || isAdded(item)) && { opacity: 0.6 },
+        ]}
+        onPress={() => markAsEaten(item)}
+        disabled={loadingId === item.id || isAdded(item)}
+      >
+        <Text style={styles.buttonText}>
+          {loadingId === item.id
+            ? "Adding..."
+            : isAdded(item)
+              ? "Added"
+              : "Mark as Eaten"}
+        </Text>
       </TouchableOpacity>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <Text style={styles.header}>Nutrition Plans</Text>
       <Text style={styles.subHeader}>Track your daily meals</Text>
 
@@ -93,10 +148,9 @@ const NutritionScreen = ({ navigation }) => {
         ))}
       </View>
 
-      {/* List */}
       <FlatList
         data={filteredData}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => String(item.id)}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />
@@ -169,9 +223,9 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#fff",
     padding: 15,
-    borderRadius: 12,
-    marginBottom: 10,
-    elevation: 2,
+    borderRadius: 14,
+    marginBottom: 12,
+    elevation: 3,
   },
 
   title: {
@@ -184,13 +238,13 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 13,
     color: "#374151",
-    marginBottom: 2,
+    marginBottom: 3,
   },
 
   button: {
     marginTop: 10,
     backgroundColor: "#111827",
-    padding: 10,
+    paddingVertical: 10,
     borderRadius: 10,
     alignItems: "center",
   },
@@ -215,4 +269,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NutritionScreen;
+export default Nutrition;

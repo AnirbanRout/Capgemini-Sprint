@@ -1,25 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
   FlatList,
-  StyleSheet,
   Image,
   TouchableOpacity,
+  StyleSheet,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Api from "../api/Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logout } from "../redux/slice/AuthSlice";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ProfileScreen = ({ navigation }) => {
   const user = useSelector((state) => state.auth.user);
+  const eatenMeals = useSelector((state) => state.workout.eatenMeals);
+
   const dispatch = useDispatch();
 
   const [history, setHistory] = useState([]);
 
   const getHistory = async () => {
     try {
+      if (!user?.id) return;
+
       const res = await Api.get(`/workoutHistory?userId=${user.id}`);
       setHistory(res.data);
     } catch (err) {
@@ -27,14 +32,20 @@ const ProfileScreen = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    getHistory();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      if (user?.id) getHistory();
+    }, [user?.id]),
+  );
+
+  const sortedHistory = [...history].sort(
+    (a, b) => new Date(b.date) - new Date(a.date),
+  );
 
   const totalWorkouts = history.length;
 
   const lastWorkout =
-    history.length > 0 ? history[history.length - 1].date.split("T")[0] : "N/A";
+    sortedHistory.length > 0 ? sortedHistory[0].date.split("T")[0] : "N/A";
 
   const logoutHandler = async () => {
     await AsyncStorage.clear();
@@ -42,15 +53,16 @@ const ProfileScreen = ({ navigation }) => {
     navigation.replace("Login");
   };
 
-  const renderItem = ({ item }) => (
-    <View style={styles.historyCard}>
-      <View style={styles.historyTopRow}>
+  // WORKOUT ITEM
+  const renderWorkout = ({ item }) => (
+    <View style={styles.card}>
+      <View style={styles.row}>
         <Text style={styles.icon}>🏋️</Text>
 
         <View style={{ flex: 1 }}>
-          <Text style={styles.historyTitle}>Workout #{item.workoutId}</Text>
+          <Text style={styles.title}>Workout #{item.workoutId}</Text>
 
-          <Text style={styles.historyDate}>📅 {item.date.split("T")[0]}</Text>
+          <Text style={styles.date}>📅 {item.date.split("T")[0]}</Text>
         </View>
       </View>
 
@@ -60,24 +72,45 @@ const ProfileScreen = ({ navigation }) => {
     </View>
   );
 
+  // MEAL ITEM
+  const renderMeal = ({ item }) => (
+    <View style={styles.card}>
+      <View style={styles.row}>
+        <Text style={styles.icon}>🍽️</Text>
+
+        <View style={{ flex: 1 }}>
+          <Text style={styles.title}>{item.mealName}</Text>
+
+          <Text style={styles.date}>📅 {item.date?.split("T")[0]}</Text>
+        </View>
+      </View>
+
+      <View style={styles.badge}>
+        <Text style={styles.badgeText}>🔥 {item.calories} kcal</Text>
+      </View>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
-      {/* Profile Card */}
+      {/* PROFILE CARD */}
       <View style={styles.profileCard}>
         <Image
-          source={{ uri: user.profilePhoto || "https://i.pravatar.cc/150" }}
+          source={{
+            uri: user?.profilePhoto || "https://i.pravatar.cc/150",
+          }}
           style={styles.image}
         />
 
-        <Text style={styles.name}>{user.name}</Text>
-        <Text style={styles.email}>{user.email}</Text>
+        <Text style={styles.name}>{user?.name}</Text>
+        <Text style={styles.email}>{user?.email}</Text>
 
         <Text style={styles.meta}>
-          Age {user.age} • {user.weight}kg • {user.height}cm
+          Age {user?.age} • {user?.weight}kg • {user?.height}cm
         </Text>
       </View>
 
-      {/* Stats */}
+      {/* STATS */}
       <View style={styles.statsRow}>
         <View style={styles.statCard}>
           <Text style={styles.statValue}>{totalWorkouts}</Text>
@@ -90,17 +123,25 @@ const ProfileScreen = ({ navigation }) => {
         </View>
       </View>
 
-      {/* History */}
+      {/* WORKOUT HISTORY */}
       <Text style={styles.sectionTitle}>Workout History</Text>
 
       <FlatList
-        data={history}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
+        data={sortedHistory}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={renderWorkout}
       />
 
-      {/* Logout */}
+      {/* NUTRITION HISTORY */}
+      <Text style={styles.sectionTitle}>Nutrition History</Text>
+
+      <FlatList
+        data={eatenMeals}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={renderMeal}
+      />
+
+      {/* LOGOUT */}
       <TouchableOpacity style={styles.logoutBtn} onPress={logoutHandler}>
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
@@ -179,10 +220,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 10,
+    marginTop: 10,
     color: "#111827",
   },
 
-  historyCard: {
+  card: {
     backgroundColor: "#fff",
     padding: 15,
     borderRadius: 12,
@@ -190,7 +232,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
 
-  historyTopRow: {
+  row: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
@@ -201,13 +243,13 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 
-  historyTitle: {
+  title: {
     fontSize: 15,
     fontWeight: "bold",
     color: "#111827",
   },
 
-  historyDate: {
+  date: {
     fontSize: 12,
     color: "#6b7280",
     marginTop: 2,

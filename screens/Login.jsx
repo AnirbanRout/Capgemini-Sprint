@@ -1,22 +1,160 @@
+// import React from "react";
+// import {
+//   View,
+//   Text,
+//   TextInput,
+//   Button,
+//   StyleSheet,
+//   Alert,
+//   KeyboardAvoidingView,
+// } from "react-native";
+// import { Formik, ErrorMessage } from "formik";
+// import * as Yup from "yup";
+// import axios from "axios";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+// import { useDispatch } from "react-redux";
+// import { login } from "../redux/slice/AuthSlice";
+
+// import { Platform } from "react-native";
+
+// import Api from "../api/Api";
+
+// const LoginSchema = Yup.object({
+//   email: Yup.string().email("Invalid Email").required("Email is required"),
+//   password: Yup.string().required("Password is required"),
+// });
+
+// const ErrorText = ({ children }) => (
+//   <Text style={{ color: "red", marginBottom: 10 }}>{children}</Text>
+// );
+
+// const LoginScreen = ({ navigation }) => {
+//   const dispatch = useDispatch();
+
+//   const handleLogin = async (values, { resetForm }) => {
+//     try {
+//       const res = await Api.get(`/users?email=${values.email}`);
+//       if (res.data.length === 0) {
+//         Alert.alert("Error", "User not found");
+//         return;
+//       }
+
+//       const user = res.data[0];
+//       if (user.password !== values.password) {
+//         Alert.alert("Error", "Invalid password");
+//         return;
+//       }
+
+//       const token = `token_${Date.now()}`;
+
+//       dispatch(login({ user, token }));
+
+//       await AsyncStorage.setItem(
+//         "auth",
+//         JSON.stringify({
+//           token,
+//           user,
+//         }),
+//       );
+
+//       resetForm();
+
+//       navigation.replace("Drawer");
+//     } catch (error) {
+//       console.log(error);
+//       Alert.alert("Error", "Something went wrong");
+//     }
+//   };
+
+//   return (
+//     <Formik
+//       initialValues={{
+//         email: "",
+//         password: "",
+//       }}
+//       validationSchema={LoginSchema}
+//       onSubmit={handleLogin}
+//     >
+//       {({
+//         values,
+//         handleChange,
+//         handleBlur,
+//         handleSubmit,
+//         touched,
+//         errors,
+//       }) => (
+//         <View style={styles.container}>
+//           <Text style={styles.heading}>Login</Text>
+
+//           <TextInput
+//             placeholder="Email"
+//             style={styles.input}
+//             value={values.email}
+//             onChangeText={handleChange("email")}
+//             onBlur={handleBlur("email")}
+//           />
+//           <ErrorMessage name="email" component={ErrorText} />
+
+//           <TextInput
+//             placeholder="Password"
+//             secureTextEntry
+//             style={styles.input}
+//             value={values.password}
+//             onChangeText={handleChange("password")}
+//             onBlur={handleBlur("password")}
+//           />
+//           <ErrorMessage name="password" component={ErrorText} />
+
+//           <Button title="Login" onPress={handleSubmit} />
+//         </View>
+//       )}
+//     </Formik>
+//   );
+// };
+
+// export default LoginScreen;
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     padding: 20,
+//     justifyContent: "center",
+//   },
+//   heading: {
+//     fontSize: 30,
+//     fontWeight: "bold",
+//     marginBottom: 30,
+//     textAlign: "center",
+//   },
+//   input: {
+//     borderWidth: 1,
+//     borderRadius: 8,
+//     padding: 12,
+//     marginBottom: 10,
+//   },
+//   error: {
+//     color: "red",
+//     marginBottom: 10,
+//   },
+// });
+
 import React from "react";
 import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   Alert,
   KeyboardAvoidingView,
+  Platform,
+  TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/slice/AuthSlice";
-
-import { Platform } from "react-native";
-
 import Api from "../api/Api";
 
 const LoginSchema = Yup.object({
@@ -25,7 +163,7 @@ const LoginSchema = Yup.object({
 });
 
 const ErrorText = ({ children }) => (
-  <Text style={{ color: "red", marginBottom: 10 }}>{children}</Text>
+  <Text style={styles.errorText}>{children}</Text>
 );
 
 const LoginScreen = ({ navigation }) => {
@@ -34,12 +172,14 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = async (values, { resetForm }) => {
     try {
       const res = await Api.get(`/users?email=${values.email}`);
+
       if (res.data.length === 0) {
         Alert.alert("Error", "User not found");
         return;
       }
 
       const user = res.data[0];
+
       if (user.password !== values.password) {
         Alert.alert("Error", "Invalid password");
         return;
@@ -49,16 +189,9 @@ const LoginScreen = ({ navigation }) => {
 
       dispatch(login({ user, token }));
 
-      await AsyncStorage.setItem(
-        "auth",
-        JSON.stringify({
-          token,
-          user,
-        }),
-      );
+      await AsyncStorage.setItem("auth", JSON.stringify({ user, token }));
 
       resetForm();
-
       navigation.replace("Drawer");
     } catch (error) {
       console.log(error);
@@ -67,73 +200,109 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <Formik
-      initialValues={{
-        email: "",
-        password: "",
-      }}
-      validationSchema={LoginSchema}
-      onSubmit={handleLogin}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      {({
-        values,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        touched,
-        errors,
-      }) => (
-        <View style={styles.container}>
-          <Text style={styles.heading}>Login</Text>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Text style={styles.heading}>Welcome Back 👋</Text>
+        <Text style={styles.subHeading}>Login to continue</Text>
 
-          <TextInput
-            placeholder="Email"
-            style={styles.input}
-            value={values.email}
-            onChangeText={handleChange("email")}
-            onBlur={handleBlur("email")}
-          />
-          <ErrorMessage name="email" component={ErrorText} />
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          validationSchema={LoginSchema}
+          onSubmit={handleLogin}
+        >
+          {({ values, handleChange, handleBlur, handleSubmit }) => (
+            <View>
+              {/* EMAIL */}
+              <TextInput
+                placeholder="Email"
+                style={styles.input}
+                value={values.email}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                placeholderTextColor="#9ca3af"
+              />
+              <ErrorMessage name="email" component={ErrorText} />
 
-          <TextInput
-            placeholder="Password"
-            secureTextEntry
-            style={styles.input}
-            value={values.password}
-            onChangeText={handleChange("password")}
-            onBlur={handleBlur("password")}
-          />
-          <ErrorMessage name="password" component={ErrorText} />
+              {/* PASSWORD */}
+              <TextInput
+                placeholder="Password"
+                style={styles.input}
+                value={values.password}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                secureTextEntry
+                placeholderTextColor="#9ca3af"
+              />
+              <ErrorMessage name="password" component={ErrorText} />
 
-          <Button title="Login" onPress={handleSubmit} />
-        </View>
-      )}
-    </Formik>
+              {/* BUTTON */}
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Login</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Formik>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
-export default LoginScreen;
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 20,
+    flexGrow: 1,
     justifyContent: "center",
+    padding: 20,
+    backgroundColor: "#f9fafb",
   },
+
   heading: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 30,
     textAlign: "center",
+    color: "#111827",
   },
+
+  subHeading: {
+    textAlign: "center",
+    marginBottom: 30,
+    color: "#6b7280",
+  },
+
   input: {
     borderWidth: 1,
-    borderRadius: 8,
-    padding: 12,
+    borderColor: "#e5e7eb",
+    borderRadius: 10,
+    padding: 14,
     marginBottom: 10,
+    backgroundColor: "#fff",
   },
-  error: {
+
+  button: {
+    backgroundColor: "#111827",
+    padding: 14,
+    borderRadius: 10,
+    marginTop: 10,
+  },
+
+  buttonText: {
+    color: "#fff",
+    textAlign: "center",
+    fontWeight: "600",
+  },
+
+  errorText: {
     color: "red",
-    marginBottom: 10,
+    marginBottom: 8,
+    fontSize: 12,
   },
 });
+
+export default LoginScreen;
