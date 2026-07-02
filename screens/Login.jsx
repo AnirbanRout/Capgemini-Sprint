@@ -115,7 +115,7 @@ const LoginScreen = ({ navigation }) => {
           style={styles.button}
           onPress={() => navigation.navigate("Signup")}
         >
-          <Text style={styles.buttonText}>Register</Text>
+          <Text style={styles.buttonText}>Don't have an account? Sign up</Text>
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
