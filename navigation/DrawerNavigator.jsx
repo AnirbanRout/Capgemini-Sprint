@@ -6,7 +6,6 @@ const Drawer = createDrawerNavigator();
 import TabNavigator from "./TabNavigator";
 import Settings from "../screens/Settings";
 import About from "../screens/About";
-import Logout from "../screens/Logout";
 
 const DrawerNavigator = () => {
   return (
@@ -14,7 +13,6 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="Home" component={TabNavigator} />
       <Drawer.Screen name="Settings" component={Settings} />
       <Drawer.Screen name="About" component={About} />
-      <Drawer.Screen name="Logout" component={Logout} />
     </Drawer.Navigator>
   );
 };
