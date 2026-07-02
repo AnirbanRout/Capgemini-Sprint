@@ -47,6 +47,15 @@
       "profilePhoto": "",
       "role": "user",
       "progressPhotos": []
+    },
+    {
+      "name": "Anirban Rout ",
+      "email": "anirbanrout73505@gmail.com",
+      "password": "123456",
+      "age": 22,
+      "height": 180,
+      "weight": 55,
+      "id": "U4AOziZvn7g"
     }
   ],
   "workouts": [

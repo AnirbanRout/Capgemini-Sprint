@@ -72,44 +72,51 @@ const LoginScreen = ({ navigation }) => {
         <Text style={styles.subHeading}>Login to continue</Text>
 
         <Formik
-          initialValues={{ email: "", password: "" }}
+          initialValues={{
+            email: "",
+            password: "",
+          }}
           validationSchema={LoginSchema}
           onSubmit={handleLogin}
         >
           {({ values, handleChange, handleBlur, handleSubmit }) => (
             <View>
-              {/* EMAIL */}
               <TextInput
-                placeholder="Email"
                 style={styles.input}
+                placeholder="Email"
+                placeholderTextColor="#9ca3af"
                 value={values.email}
                 onChangeText={handleChange("email")}
                 onBlur={handleBlur("email")}
                 keyboardType="email-address"
                 autoCapitalize="none"
-                placeholderTextColor="#9ca3af"
               />
               <ErrorMessage name="email" component={ErrorText} />
 
-              {/* PASSWORD */}
               <TextInput
-                placeholder="Password"
                 style={styles.input}
+                placeholder="Password"
+                placeholderTextColor="#9ca3af"
                 value={values.password}
                 onChangeText={handleChange("password")}
                 onBlur={handleBlur("password")}
                 secureTextEntry
-                placeholderTextColor="#9ca3af"
               />
               <ErrorMessage name="password" component={ErrorText} />
 
-              {/* BUTTON */}
               <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Login</Text>
               </TouchableOpacity>
             </View>
           )}
         </Formik>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Signup")}
+        >
+          <Text style={styles.buttonText}>Register</Text>
+        </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -119,49 +126,55 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     justifyContent: "center",
-    padding: 20,
-    backgroundColor: "#f9fafb",
+    backgroundColor: "#fff",
+    paddingHorizontal: 20,
   },
 
   heading: {
     fontSize: 28,
     fontWeight: "bold",
     textAlign: "center",
-    color: "#111827",
+    color: "#222",
+    marginBottom: 8,
   },
 
   subHeading: {
+    fontSize: 16,
     textAlign: "center",
-    marginBottom: 30,
     color: "#6b7280",
+    marginBottom: 30,
   },
 
   input: {
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: "#d1d5db",
     borderRadius: 10,
-    padding: 14,
+    backgroundColor: "#fafafa",
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    fontSize: 16,
+    marginBottom: 8,
+  },
+
+  errorText: {
+    color: "#ef4444",
+    fontSize: 13,
     marginBottom: 10,
-    backgroundColor: "#fff",
+    marginLeft: 2,
   },
 
   button: {
     backgroundColor: "#111827",
-    padding: 14,
+    paddingVertical: 14,
     borderRadius: 10,
-    marginTop: 10,
+    marginTop: 15,
   },
 
   buttonText: {
     color: "#fff",
     textAlign: "center",
+    fontSize: 16,
     fontWeight: "600",
-  },
-
-  errorText: {
-    color: "red",
-    marginBottom: 8,
-    fontSize: 12,
   },
 });
 
