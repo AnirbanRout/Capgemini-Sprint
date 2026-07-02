@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Switch, TouchableOpacity } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleDarkMode } from "../redux/slice/ThemeSlice";
 
 const Settings = ({ navigation }) => {
   const user = useSelector((state) => state.auth.user);
+  const darkMode = useSelector((state) => state.theme.darkMode);
+  const dispatch = useDispatch();
 
   const [notifications, setNotifications] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
+  const styles = createStyles(darkMode);
 
   return (
     <View style={styles.container}>
@@ -30,7 +33,10 @@ const Settings = ({ navigation }) => {
         <View style={styles.row}>
           <Text style={styles.title}>Dark Mode</Text>
 
-          <Switch value={darkMode} onValueChange={setDarkMode} />
+          <Switch
+            value={darkMode}
+            onValueChange={() => dispatch(toggleDarkMode())}
+          />
         </View>
       </View>
 
@@ -54,60 +60,61 @@ const Settings = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f3f4f6",
-    padding: 20,
-  },
+const createStyles = (darkMode) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: darkMode ? "#0f172a" : "#f3f4f6",
+      padding: 20,
+    },
 
-  heading: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#111827",
-    marginBottom: 20,
-  },
+    heading: {
+      fontSize: 28,
+      fontWeight: "bold",
+      color: darkMode ? "#f8fafc" : "#111827",
+      marginBottom: 20,
+    },
 
-  card: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 18,
-    marginBottom: 15,
-    elevation: 2,
-  },
+    card: {
+      backgroundColor: darkMode ? "#1e293b" : "#fff",
+      borderRadius: 12,
+      padding: 18,
+      marginBottom: 15,
+      elevation: 2,
+    },
 
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
-  },
+    row: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 12,
+    },
 
-  title: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#111827",
-  },
+    title: {
+      fontSize: 16,
+      fontWeight: "bold",
+      color: darkMode ? "#f8fafc" : "#111827",
+    },
 
-  text: {
-    fontSize: 15,
-    color: "#4b5563",
-    marginTop: 8,
-  },
+    text: {
+      fontSize: 15,
+      color: darkMode ? "#cbd5e1" : "#4b5563",
+      marginTop: 8,
+    },
 
-  button: {
-    backgroundColor: "#111827",
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 10,
-  },
+    button: {
+      backgroundColor: darkMode ? "#334155" : "#111827",
+      padding: 15,
+      borderRadius: 10,
+      marginTop: 10,
+    },
 
-  buttonText: {
-    color: "#fff",
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-});
+    buttonText: {
+      color: "#fff",
+      textAlign: "center",
+      fontWeight: "bold",
+      fontSize: 16,
+    },
+  });
 
 export default Settings;
