@@ -15,6 +15,7 @@ import { addWorkoutHistory } from "../redux/slice/WorkoutSlice";
 
 const WorkoutScreen = ({ navigation }) => {
   const userData = useSelector((state) => state.auth);
+  const darkMode = useSelector((state) => state.theme.darkMode);
   const dispatch = useDispatch();
 
   const [workouts, setWorkouts] = useState([]);
@@ -24,6 +25,7 @@ const WorkoutScreen = ({ navigation }) => {
   const [addedMap, setAddedMap] = useState({}); // 👈 button state
 
   const userId = userData?.user?.id;
+  const styles = createStyles(darkMode);
 
   const getWorkouts = async () => {
     try {
@@ -106,7 +108,10 @@ const WorkoutScreen = ({ navigation }) => {
       <Text style={styles.header}>Available Workouts</Text>
 
       {loading ? (
-        <ActivityIndicator size="large" color="#111827" />
+        <ActivityIndicator
+          size="large"
+          color={darkMode ? "#f8fafc" : "#111827"}
+        />
       ) : workouts.length === 0 ? (
         <Text style={styles.emptyText}>No workouts available</Text>
       ) : (
@@ -127,68 +132,69 @@ const WorkoutScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 15,
-    backgroundColor: "#f5f5f5",
-  },
+const createStyles = (darkMode) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 15,
+      backgroundColor: darkMode ? "#0f172a" : "#f5f5f5",
+    },
 
-  header: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 15,
-    color: "#111827",
-  },
+    header: {
+      fontSize: 22,
+      fontWeight: "bold",
+      marginBottom: 15,
+      color: darkMode ? "#f8fafc" : "#111827",
+    },
 
-  card: {
-    backgroundColor: "#fff",
-    padding: 15,
-    marginBottom: 12,
-    borderRadius: 12,
-    elevation: 3,
-  },
+    card: {
+      backgroundColor: darkMode ? "#1e293b" : "#fff",
+      padding: 15,
+      marginBottom: 12,
+      borderRadius: 12,
+      elevation: 3,
+    },
 
-  title: {
-    fontSize: 17,
-    fontWeight: "bold",
-    marginBottom: 6,
-    color: "#111827",
-  },
+    title: {
+      fontSize: 17,
+      fontWeight: "bold",
+      marginBottom: 6,
+      color: darkMode ? "#f8fafc" : "#111827",
+    },
 
-  text: {
-    fontSize: 14,
-    color: "#374151",
-    marginTop: 2,
-  },
+    text: {
+      fontSize: 14,
+      color: darkMode ? "#cbd5e1" : "#374151",
+      marginTop: 2,
+    },
 
-  button: {
-    marginTop: 12,
-    backgroundColor: "#111827",
-    padding: 10,
-    borderRadius: 8,
-    alignItems: "center",
-  },
+    button: {
+      marginTop: 12,
+      backgroundColor: darkMode ? "#334155" : "#111827",
+      padding: 10,
+      borderRadius: 8,
+      alignItems: "center",
+    },
 
-  dashboardBtn: {
-    marginTop: 10,
-    backgroundColor: "#2563EB",
-    padding: 12,
-    borderRadius: 10,
-  },
+    dashboardBtn: {
+      marginTop: 10,
+      backgroundColor: darkMode ? "#2563eb" : "#2563EB",
+      padding: 12,
+      borderRadius: 10,
+    },
 
-  buttonText: {
-    color: "#fff",
-    textAlign: "center",
-    fontWeight: "600",
-  },
+    buttonText: {
+      color: "#fff",
+      textAlign: "center",
+      fontWeight: "600",
+    },
 
-  emptyText: {
-    textAlign: "center",
-    marginTop: 20,
-    color: "#6B7280",
-    fontSize: 16,
-  },
-});
+    emptyText: {
+      textAlign: "center",
+      marginTop: 20,
+      color: darkMode ? "#cbd5e1" : "#6B7280",
+      fontSize: 16,
+    },
+  });
 
 export default WorkoutScreen;

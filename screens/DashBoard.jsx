@@ -7,11 +7,14 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 
 const DashBoard = ({ navigation }) => {
   const userData = useSelector((state) => state.auth);
+  const darkMode = useSelector((state) => state.theme.darkMode);
 
   const [workoutHistoryData, setWorkoutHistoryData] = useState([]);
   const [nutrition, setNutrition] = useState([]);
   const [workoutData, setWorkoutData] = useState([]);
   const [preferences, setPreferences] = useState([]);
+
+  const styles = createStyles(darkMode);
 
   useEffect(() => {
     if (!userData.user.id) return;
@@ -138,122 +141,128 @@ const DashBoard = ({ navigation }) => {
 
 export default DashBoard;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f4f6f8",
-    padding: 15,
-  },
+const createStyles = (darkMode) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: darkMode ? "#0f172a" : "#f4f6f8",
+      padding: 15,
+    },
 
-  headerCard: {
-    backgroundColor: "#4f46e5",
-    padding: 20,
-    borderRadius: 15,
-  },
+    headerCard: {
+      backgroundColor: darkMode ? "#1d4ed8" : "#4f46e5",
+      padding: 20,
+      borderRadius: 15,
+    },
 
-  welcome: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#fff",
-  },
+    welcome: {
+      fontSize: 20,
+      fontWeight: "bold",
+      color: "#fff",
+    },
 
-  subText: {
-    color: "#e5e7eb",
-    marginTop: 5,
-  },
+    subText: {
+      color: "#e5e7eb",
+      marginTop: 5,
+    },
 
-  statsRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 15,
-  },
+    statsRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginTop: 15,
+    },
 
-  statCard: {
-    flex: 1,
-    backgroundColor: "#fff",
-    marginHorizontal: 5,
-    padding: 15,
-    borderRadius: 12,
-    alignItems: "center",
-    elevation: 3,
-  },
+    statCard: {
+      flex: 1,
+      backgroundColor: darkMode ? "#1e293b" : "#fff",
+      marginHorizontal: 5,
+      padding: 15,
+      borderRadius: 12,
+      alignItems: "center",
+      elevation: 3,
+    },
 
-  statNumber: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
+    statNumber: {
+      fontSize: 18,
+      fontWeight: "bold",
+      color: darkMode ? "#f8fafc" : "#111827",
+    },
 
-  statLabel: {
-    fontSize: 12,
-    color: "#666",
-  },
+    statLabel: {
+      fontSize: 12,
+      color: darkMode ? "#cbd5e1" : "#666",
+    },
 
-  sectionTitle: {
-    marginTop: 20,
-    marginBottom: 10,
-    fontSize: 16,
-    fontWeight: "bold",
-  },
+    sectionTitle: {
+      marginTop: 20,
+      marginBottom: 10,
+      fontSize: 16,
+      fontWeight: "bold",
+      color: darkMode ? "#f8fafc" : "#111827",
+    },
 
-  card: {
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 12,
-    marginBottom: 10,
-    elevation: 2,
-  },
+    card: {
+      backgroundColor: darkMode ? "#1e293b" : "#fff",
+      padding: 15,
+      borderRadius: 12,
+      marginBottom: 10,
+      elevation: 2,
+    },
 
-  cardTitle: {
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
+    cardTitle: {
+      fontWeight: "bold",
+      marginBottom: 5,
+      color: darkMode ? "#f8fafc" : "#111827",
+    },
 
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
+    row: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      color: darkMode ? "#cbd5e1" : "#111827",
+    },
 
-  calText: {
-    marginTop: 5,
-    color: "#16a34a",
-  },
+    calText: {
+      marginTop: 5,
+      color: darkMode ? "#4ade80" : "#16a34a",
+    },
 
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-  },
+    grid: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      justifyContent: "space-between",
+    },
 
-  smallCard: {
-    width: "48%",
-    backgroundColor: "#fff",
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 10,
-    elevation: 2,
-  },
+    smallCard: {
+      width: "48%",
+      backgroundColor: darkMode ? "#1e293b" : "#fff",
+      padding: 12,
+      borderRadius: 12,
+      marginBottom: 10,
+      elevation: 2,
+    },
 
-  goalCard: {
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 12,
-  },
+    goalCard: {
+      backgroundColor: darkMode ? "#1e293b" : "#fff",
+      padding: 15,
+      borderRadius: 12,
+    },
 
-  goalText: {
-    fontWeight: "bold",
-    fontSize: 16,
-  },
+    goalText: {
+      fontWeight: "bold",
+      fontSize: 16,
+      color: darkMode ? "#f8fafc" : "#111827",
+    },
 
-  navCard: {
-    backgroundColor: "#111827",
-    padding: 15,
-    borderRadius: 12,
-    marginTop: 10,
-  },
+    navCard: {
+      backgroundColor: darkMode ? "#334155" : "#111827",
+      padding: 15,
+      borderRadius: 12,
+      marginTop: 10,
+    },
 
-  navText: {
-    color: "#fff",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-});
+    navText: {
+      color: "#fff",
+      fontWeight: "bold",
+      textAlign: "center",
+    },
+  });

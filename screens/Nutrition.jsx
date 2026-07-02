@@ -17,11 +17,14 @@ const Nutrition = ({ navigation }) => {
   const [nutrition, setNutrition] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [loadingId, setLoadingId] = useState(null);
+  const darkMode = useSelector((state) => state.theme.darkMode);
 
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.auth.user);
   const eatenMeals = useSelector((state) => state.workout.eatenMeals);
+
+  const styles = createStyles(darkMode);
 
   useEffect(() => {
     const getNutrition = async () => {
@@ -172,101 +175,102 @@ const Nutrition = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f3f4f6",
-    padding: 15,
-  },
+const createStyles = (darkMode) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: darkMode ? "#0f172a" : "#f3f4f6",
+      padding: 15,
+    },
 
-  header: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#111827",
-  },
+    header: {
+      fontSize: 20,
+      fontWeight: "bold",
+      color: darkMode ? "#f8fafc" : "#111827",
+    },
 
-  subHeader: {
-    fontSize: 13,
-    color: "#6b7280",
-    marginBottom: 10,
-  },
+    subHeader: {
+      fontSize: 13,
+      color: darkMode ? "#cbd5e1" : "#6b7280",
+      marginBottom: 10,
+    },
 
-  filterRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginBottom: 10,
-  },
+    filterRow: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      marginBottom: 10,
+    },
 
-  filterChip: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    backgroundColor: "#e5e7eb",
-    borderRadius: 20,
-    marginRight: 8,
-    marginBottom: 8,
-  },
+    filterChip: {
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      backgroundColor: darkMode ? "#1e293b" : "#e5e7eb",
+      borderRadius: 20,
+      marginRight: 8,
+      marginBottom: 8,
+    },
 
-  activeChip: {
-    backgroundColor: "#111827",
-  },
+    activeChip: {
+      backgroundColor: darkMode ? "#334155" : "#111827",
+    },
 
-  filterText: {
-    fontSize: 12,
-    color: "#374151",
-  },
+    filterText: {
+      fontSize: 12,
+      color: darkMode ? "#cbd5e1" : "#374151",
+    },
 
-  activeText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
+    activeText: {
+      color: "#fff",
+      fontWeight: "bold",
+    },
 
-  card: {
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 14,
-    marginBottom: 12,
-    elevation: 3,
-  },
+    card: {
+      backgroundColor: darkMode ? "#1e293b" : "#fff",
+      padding: 15,
+      borderRadius: 14,
+      marginBottom: 12,
+      elevation: 3,
+    },
 
-  title: {
-    fontSize: 15,
-    fontWeight: "bold",
-    marginBottom: 6,
-    color: "#111827",
-  },
+    title: {
+      fontSize: 15,
+      fontWeight: "bold",
+      marginBottom: 6,
+      color: darkMode ? "#f8fafc" : "#111827",
+    },
 
-  text: {
-    fontSize: 13,
-    color: "#374151",
-    marginBottom: 3,
-  },
+    text: {
+      fontSize: 13,
+      color: darkMode ? "#cbd5e1" : "#374151",
+      marginBottom: 3,
+    },
 
-  button: {
-    marginTop: 10,
-    backgroundColor: "#111827",
-    paddingVertical: 10,
-    borderRadius: 10,
-    alignItems: "center",
-  },
+    button: {
+      marginTop: 10,
+      backgroundColor: darkMode ? "#334155" : "#111827",
+      paddingVertical: 10,
+      borderRadius: 10,
+      alignItems: "center",
+    },
 
-  buttonText: {
-    color: "#fff",
-    fontWeight: "600",
-    fontSize: 12,
-  },
+    buttonText: {
+      color: "#fff",
+      fontWeight: "600",
+      fontSize: 12,
+    },
 
-  logoutBtn: {
-    backgroundColor: "#111827",
-    padding: 12,
-    borderRadius: 12,
-    alignItems: "center",
-    marginTop: 10,
-  },
+    logoutBtn: {
+      backgroundColor: darkMode ? "#334155" : "#111827",
+      padding: 12,
+      borderRadius: 12,
+      alignItems: "center",
+      marginTop: 10,
+    },
 
-  logoutText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-});
+    logoutText: {
+      color: "#fff",
+      fontWeight: "bold",
+    },
+  });
 
 export default Nutrition;

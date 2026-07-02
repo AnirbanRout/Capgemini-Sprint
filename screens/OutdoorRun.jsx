@@ -7,9 +7,12 @@ import { StyleSheet } from "react-native";
 
 const OutdoorRun = () => {
   const user = useSelector((state) => state.auth.user);
+  const darkMode = useSelector((state) => state.theme.darkMode);
 
   const [run, setRun] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const styles = createStyles(darkMode);
 
   useEffect(() => {
     getRun();
@@ -72,7 +75,7 @@ const OutdoorRun = () => {
         <Polyline
           coordinates={run.routeCoordinates}
           strokeWidth={4}
-          strokeColor="blue"
+          strokeColor={darkMode ? "#60a5fa" : "blue"}
         />
       </MapView>
 
@@ -91,54 +94,60 @@ const OutdoorRun = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f3f4f6",
-    padding: 15,
-  },
+const createStyles = (darkMode) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: darkMode ? "#0f172a" : "#f3f4f6",
+      padding: 15,
+    },
 
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+    loadingContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: darkMode ? "#0f172a" : "#f3f4f6",
+    },
 
-  heading: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#111827",
-    marginBottom: 15,
-    textAlign: "center",
-  },
+    loadingText: {
+      color: darkMode ? "#f8fafc" : "#111827",
+    },
 
-  map: {
-    width: "100%",
-    height: 400,
-    borderRadius: 12,
-    marginBottom: 20,
-  },
+    heading: {
+      fontSize: 22,
+      fontWeight: "bold",
+      color: darkMode ? "#f8fafc" : "#111827",
+      marginBottom: 15,
+      textAlign: "center",
+    },
 
-  locationText: {
-    fontSize: 15,
-    color: "#374151",
-    marginBottom: 8,
-    fontWeight: "500",
-  },
+    map: {
+      width: "100%",
+      height: 400,
+      borderRadius: 12,
+      marginBottom: 20,
+    },
 
-  runBtn: {
-    backgroundColor: "#2563eb",
-    padding: 14,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 20,
-  },
+    locationText: {
+      fontSize: 15,
+      color: darkMode ? "#cbd5e1" : "#374151",
+      marginBottom: 8,
+      fontWeight: "500",
+    },
 
-  runBtnText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-});
+    runBtn: {
+      backgroundColor: darkMode ? "#2563eb" : "#2563eb",
+      padding: 14,
+      borderRadius: 10,
+      alignItems: "center",
+      marginTop: 20,
+    },
+
+    runBtnText: {
+      color: "#fff",
+      fontSize: 16,
+      fontWeight: "bold",
+    },
+  });
 
 export default OutdoorRun;

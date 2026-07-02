@@ -1,7 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { useSelector } from "react-redux";
 
 const About = ({ navigation }) => {
+  const darkMode = useSelector((state) => state.theme.darkMode);
+  const styles = createStyles(darkMode);
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.heading}>About HealthTrack</Text>
@@ -41,40 +45,41 @@ const About = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f3f4f6",
-    padding: 20,
-  },
+const createStyles = (darkMode) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: darkMode ? "#0f172a" : "#f3f4f6",
+      padding: 20,
+    },
 
-  heading: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#111827",
-    marginBottom: 20,
-  },
+    heading: {
+      fontSize: 28,
+      fontWeight: "bold",
+      color: darkMode ? "#f8fafc" : "#111827",
+      marginBottom: 20,
+    },
 
-  card: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 18,
-    marginBottom: 15,
-    elevation: 2,
-  },
+    card: {
+      backgroundColor: darkMode ? "#1e293b" : "#fff",
+      borderRadius: 12,
+      padding: 18,
+      marginBottom: 15,
+      elevation: 2,
+    },
 
-  title: {
-    fontSize: 17,
-    fontWeight: "bold",
-    color: "#111827",
-    marginBottom: 10,
-  },
+    title: {
+      fontSize: 17,
+      fontWeight: "bold",
+      color: darkMode ? "#f8fafc" : "#111827",
+      marginBottom: 10,
+    },
 
-  text: {
-    fontSize: 15,
-    color: "#4b5563",
-    lineHeight: 24,
-  },
-});
+    text: {
+      fontSize: 15,
+      color: darkMode ? "#cbd5e1" : "#4b5563",
+      lineHeight: 24,
+    },
+  });
 
 export default About;
